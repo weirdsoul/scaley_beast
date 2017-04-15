@@ -6,6 +6,6 @@ package main
 import "fmt"
 
 func main() {
-     fmt.Println("Instruments server - Version 0.1")
-     fmt.Println("Copyright 2017 Andreas Eckleder")
+	fmt.Println("Instruments server - Version 0.1")
+	fmt.Println("Copyright 2017 Andreas Eckleder")
 }
