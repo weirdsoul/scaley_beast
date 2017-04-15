@@ -3,7 +3,7 @@
 // It also serves the main html file and all Javascript.
 package main
 
-import "fmt"
+  import "fmt"
 
 func main() {
 	fmt.Println("Instruments server - Version 0.1")
