@@ -7,5 +7,6 @@ go_binary(
 	name = "instruments_server",
 	srcs = [
 	     "main.go",
+	     "udpreader.go",
 	],
 )
