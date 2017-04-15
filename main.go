@@ -1,7 +1,7 @@
 // The instruments server binary contains the server side code to receive
 // flight instrument data from UDP and export it via JSON.
 // It also serves the main html file and all Javascript.
-package main
+ package main
 
    import "fmt"
 
