@@ -1,0 +1,2 @@
+build --strategy=GoCompile=standalone
+build --strategy=GoLink=standalone
