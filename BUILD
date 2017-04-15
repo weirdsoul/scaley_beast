@@ -6,6 +6,6 @@ go_prefix("github.com/weirdsoul/browser_instruments")
 go_binary(
 	name = "instruments_server",
 	srcs = [
-	     "server/main.go",
+	     "main.go",
 	],
 )
