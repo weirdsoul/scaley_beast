@@ -28,6 +28,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("net.ListenUDP: %v", err)
 	}
-	// Main receiver loop. It never stops.
-	ReadUDPLooping(sock)
+	// Start receiver loop in the background. It never stops.
+	go ReadUDPLooping(sock)
+
+	for {
+	}
 }

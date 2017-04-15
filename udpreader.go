@@ -16,6 +16,11 @@ const receiverBufferSize = 2048
 // The type of control data contained in a data set.
 type ControlDataType int32
 
+const (
+	Speed ControlDataType = 3
+	RPM   ControlDataType = 37
+)
+
 // DataSet stores a single set of X-Plane control data.
 type DataSet struct {
 	// The index number of the data point.
