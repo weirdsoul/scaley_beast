@@ -11,10 +11,19 @@ go_binary(
 	     "udpreader.go",
 	],
 	data = [
-	     "//static_html:data",
+	     ":data",
 	],
 	deps = [
 	     "//planestate:go_default_library",
 	     "//webservice:go_default_library",
 	],
+)
+
+filegroup(
+	name = "data",
+	srcs = [
+	     "index.html",
+	     "//client:instruments_client",
+	],
+	visibility = ["//visibility:public"],
 )

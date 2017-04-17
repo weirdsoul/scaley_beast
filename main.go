@@ -15,7 +15,7 @@ import (
 
 var udpPort = flag.Int("udp_port", 49042, "udp port to listen on")
 var httpPort = flag.Int("http_port", 8080, "port used for serving http")
-var staticDir = flag.String("static_dir", "./static_html", "directory containing static content")
+var staticDir = flag.String("static_dir", "./", "directory containing static content")
 
 func main() {
 	fmt.Println("Instruments server - Version 0.1")
