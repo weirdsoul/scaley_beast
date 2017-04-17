@@ -8,9 +8,14 @@ import (
 	"fmt"
 	"log"
 	"net"
+
+	"github.com/weirdsoul/browser_instruments/planestate"
+	"github.com/weirdsoul/browser_instruments/webservice"
 )
 
-var port = flag.Int("port", 49042, "udp port to listen on")
+var udpPort = flag.Int("udp_port", 49042, "udp port to listen on")
+var httpPort = flag.Int("http_port", 8080, "port used for serving http")
+var staticDir = flag.String("static_dir", "./static_html", "directory containing static content")
 
 func main() {
 	fmt.Println("Instruments server - Version 0.1")
@@ -18,9 +23,9 @@ func main() {
 
 	flag.Parse()
 
-	log.Printf("Listening on port %v.\n", *port)
+	log.Printf("Listening on port %v.\n", *udpPort)
 
-	addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf(":%v", *port))
+	addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf(":%v", *udpPort))
 	if err != nil {
 		log.Fatalf("net.ResolveUDPAddr: %v", err)
 	}
@@ -28,9 +33,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("net.ListenUDP: %v", err)
 	}
-	// Start receiver loop in the background. It never stops.
-	go ReadUDPLooping(sock)
+	planeState := planestate.NewPlaneState()
 
-	for {
-	}
+	// Start receiver loop in the background. It never stops.
+	go ReadUDPLooping(sock, planeState)
+
+	log.Printf("Serving http on port %v.\n", *httpPort)
+
+	// Start serving http.
+	webservice.ServeHTTP(*httpPort, *staticDir, planeState)
 }

@@ -13,19 +13,16 @@ import (
 const receiverBufferSize = 2048
 
 // ReadUDPLooping blocks forever and keeps reading from the specified UDP port.
-// It maintains a consistant view of the world which can then be polled for
-// the next messages to be sent via JSON.
-func ReadUDPLooping(sock *net.UDPConn) {
+// It uses planeState to maintain a consistant view of the world.
+func ReadUDPLooping(sock *net.UDPConn, planeState *planestate.PlaneState) {
 	buffer := make([]byte, receiverBufferSize)
 	// Main receiver loop. It never stops.
 	for {
-		n, senderAddr, err := sock.ReadFromUDP(buffer)
+		n, _, err := sock.ReadFromUDP(buffer)
 		if err != nil {
 			log.Printf("sock.ReadFromUDP: %v", err)
 		}
-		log.Printf("Received %v bytes of data from %v", n, *senderAddr)
 		if (n-5)%36 == 0 && string(buffer[:4]) == "DATA" {
-			log.Printf("This looks like an X-Plane DATA packet.")
 			r := bytes.NewReader(buffer[5:n])
 			for {
 				var dataSet planestate.DataSet
@@ -36,7 +33,8 @@ func ReadUDPLooping(sock *net.UDPConn) {
 					}
 					break
 				}
-				log.Printf("Message with index %v: %v", dataSet.Index, dataSet.Values)
+				// This looks like a valid X-Plane data packet. Update the control state.
+				planeState.UpdateControlData(dataSet)
 			}
 		} else {
 			log.Printf("Ignoring packet with header '%s'", string(buffer[:4]))

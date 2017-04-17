@@ -13,7 +13,7 @@ import (
 // ServeHTTP serves http on the specified port using the specified plane data.
 // It offers a simple JSON service to retrieve plane state and serves static
 // http content from the specified directory. This function never returns.
-func ServeHTTP(port int, staticDir string, planeState planestate.PlaneState) {
+func ServeHTTP(port int, staticDir string, planeState *planestate.PlaneState) {
 	// Serve the static directory as the root.
 	http.Handle("/", http.FileServer(http.Dir(staticDir)))
 
