@@ -6,26 +6,11 @@ import (
 	"io"
 	"log"
 	"net"
+
+	"github.com/weirdsoul/browser_instruments/planestate"
 )
 
 const receiverBufferSize = 2048
-
-// The type of control data contained in a data set.
-type ControlDataType int32
-
-const (
-	Speed ControlDataType = 3
-	RPM   ControlDataType = 37
-)
-
-// DataSet stores a single set of X-Plane control data.
-type DataSet struct {
-	// The index number of the data point.
-	Index ControlDataType
-	// The actual data values. Index determines their interpretation.
-	// Unused values contain either zero or -999.
-	Values [8]float32
-}
 
 // ReadUDPLooping blocks forever and keeps reading from the specified UDP port.
 // It maintains a consistant view of the world which can then be polled for
@@ -43,7 +28,7 @@ func ReadUDPLooping(sock *net.UDPConn) {
 			log.Printf("This looks like an X-Plane DATA packet.")
 			r := bytes.NewReader(buffer[5:n])
 			for {
-				var dataSet DataSet
+				var dataSet planestate.DataSet
 				if err = binary.Read(r, binary.LittleEndian, &dataSet); err != nil {
 					if err != io.EOF {
 						// Only print unexpected errors.
