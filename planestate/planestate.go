@@ -1,3 +1,4 @@
+// Package planestate contains code for managing data state.
 package planestate
 
 import (
