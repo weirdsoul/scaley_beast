@@ -1,2 +1,3 @@
 build --strategy=GoCompile=standalone
 build --strategy=GoLink=standalone
+build --strategy=Closure=worker
