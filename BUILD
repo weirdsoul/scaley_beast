@@ -10,6 +10,9 @@ go_binary(
 	     "main.go",
 	     "udpreader.go",
 	],
+	data = [
+	     "//static_html:data",
+	],
 	deps = [
 	     "//planestate:go_default_library",
 	     "//webservice:go_default_library",
