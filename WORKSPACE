@@ -40,7 +40,7 @@ go_library(
 	 "util.go",
 	 ],
     visibility = ["//visibility:public"],
-)	 
+)
 
 """
 
