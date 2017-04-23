@@ -15,7 +15,7 @@ function main() {
     var ws = new goog.net.WebSocket(true);
     goog.events.listen(ws, goog.net.WebSocket.EventType.MESSAGE,
 		       /** @param {!goog.net.WebSocket.MessageEvent} e **/
-		       function(e) {
+		       function(e) {			   
 			   var console = goog.dom.getElement("console");
 			   if (console != null) {
 			       var msg = goog.json.parse(e.message);
@@ -24,6 +24,7 @@ function main() {
 			   } else {
 			       goog.log.error(log, "Couldn't find console.");
 			   }
+			   ws.send("ACK");			   
 		       });
     ws.open("ws://localhost:8080/ws");
 }

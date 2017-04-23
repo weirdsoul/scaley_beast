@@ -17,7 +17,14 @@ type websocketHandler struct {
 	planeState *planestate.PlaneState
 }
 
-var upgrader = websocket.Upgrader{}
+// bufferSize specifies the read and write buffer sizes in Bytes.
+const bufferSize = 32
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:    bufferSize,
+	WriteBufferSize:   bufferSize,
+	EnableCompression: false,
+}
 
 type jsonResponse struct {
 	Message string
@@ -29,16 +36,28 @@ func (*websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Println("upgrade:", err)
 		return
 	}
-	ws.EnableWriteCompression(false)
 
 	defer ws.Close()
+
 	// A never ending stream of Hello world.
-	for x := 0; x < 10; x++ {
+	for {
 		response := &jsonResponse{
 			Message: "Hello world!",
 		}
 		if ws.WriteJSON(&response); err != nil {
 			log.Println("ws.WriteMessage: ", err)
+			return
+		}
+		// We ignore the actual message.
+		messageType, _, err := ws.ReadMessage()
+		if err != nil {
+			log.Println("ws.ReadMessage: ", err)
+			return
+		}
+		if messageType != websocket.TextMessage {
+			log.Printf("ws.ReadMessage: messageType(%v) != TextMessage)\n",
+				messageType)
+			return
 		}
 	}
 }
