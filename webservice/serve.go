@@ -19,16 +19,27 @@ type websocketHandler struct {
 
 var upgrader = websocket.Upgrader{}
 
+type jsonResponse struct {
+	Message string
+}
+
 func (*websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("upgrade:", err)
 		return
 	}
+	ws.EnableWriteCompression(false)
 
 	defer ws.Close()
-	if ws.WriteMessage(websocket.TextMessage, []byte("Hello world!")); err != nil {
-		log.Println("ws.WriteMessage: ", err)
+	// A never ending stream of Hello world.
+	for x := 0; x < 10; x++ {
+		response := &jsonResponse{
+			Message: "Hello world!",
+		}
+		if ws.WriteJSON(&response); err != nil {
+			log.Println("ws.WriteMessage: ", err)
+		}
 	}
 }
 
