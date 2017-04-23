@@ -22,7 +22,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_prefix", "go_library")
 go_prefix("github.com/gorilla/websocket")
 
 go_library(
-    name = "websocket",
+    name = "go_default_library",
     srcs = [
     	 "client.go",
 	 "client_clone.go",

@@ -11,5 +11,6 @@ go_library(
 	visibility = ["//visibility:public"],
 	deps = [
 	     "//planestate:go_default_library",
+	     "@gorilla_websocket//:go_default_library",
 	],
 )

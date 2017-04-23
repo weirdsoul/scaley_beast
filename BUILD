@@ -16,6 +16,5 @@ go_binary(
 	deps = [
 	     "//planestate:go_default_library",
 	     "//webservice:go_default_library",
-	     "@gorilla_websocket//:websocket",
 	],
 )
