@@ -5,13 +5,13 @@ goog.require('goog.log');
 goog.require('goog.net.WebSocket');
 goog.require('goog.net.WebSocket.MessageEvent');
 
-var log = goog.log.getLogger("main");
-
 /**
  * Main entry point into the client application.
  * @export
  */
 function main() {
+    var log = goog.log.getLogger("main");
+    
     var ws = new goog.net.WebSocket(true);
     goog.events.listen(ws, goog.net.WebSocket.EventType.MESSAGE,
 		       /** @param {!goog.net.WebSocket.MessageEvent} e **/
@@ -19,7 +19,7 @@ function main() {
 			   var console = goog.dom.getElement("console");
 			   if (console != null) {
 			       var msg = goog.json.parse(e.message);
-			       goog.dom.append(console, msg["Message"]);
+			       goog.dom.append(console, e.message);
 			       goog.log.info(log, "Received message " + msg);
 			   } else {
 			       goog.log.error(log, "Couldn't find console.");

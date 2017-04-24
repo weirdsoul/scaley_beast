@@ -47,14 +47,19 @@ type PlaneState struct {
 	// value to see if anything has changed before going through the map.
 	lastUpdate SequenceNumber
 	// The mutex guarding this PlaneState instance.
-	m sync.RWMutex
+	m *sync.RWMutex
+	// The condition that is triggered when lastUpdate is updated.
+	cond *sync.Cond
 }
 
 // NewPlaneState returns a new plane state instance with no current control data.
 func NewPlaneState() *PlaneState {
+	mutex := &sync.RWMutex{}
 	return &PlaneState{
 		lastUpdate:   0,
 		dataStateMap: make(map[ControlDataType]stampedControlData),
+		m:            mutex,
+		cond:         sync.NewCond(mutex.RLocker()),
 	}
 }
 
@@ -72,18 +77,27 @@ func (p *PlaneState) UpdateControlData(controlData DataSet) SequenceNumber {
 	}
 
 	p.dataStateMap[controlData.Index] = newControlData
+	// Let the world know we have an update to make.
+	p.cond.Broadcast()
 	return p.lastUpdate
 }
 
 // GetControlDataSince retrieves all control data updates since the specified
 // SequenceNumber. Returns the sequence number of the last update and a slice of
 // DataSet instances, one for each type of control data that was updated.
-func (p PlaneState) GetControlDataSince(seqNum SequenceNumber) (SequenceNumber, []DataSet) {
+// If blocking is true, the call will block until updates are available.
+func (p *PlaneState) GetControlDataSince(seqNum SequenceNumber, blocking bool) (SequenceNumber, []DataSet) {
 	p.m.RLock()
 	defer p.m.RUnlock()
 
-	if p.lastUpdate <= seqNum {
-		return p.lastUpdate, nil
+	for p.lastUpdate <= seqNum {
+		if blocking {
+			// Wait for updates.
+			p.cond.Wait()
+		} else {
+			// Just return, we do not wait for any updates to occur.
+			return p.lastUpdate, nil
+		}
 	}
 
 	var newData []DataSet

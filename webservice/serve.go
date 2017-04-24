@@ -14,23 +14,26 @@ import (
 // websocketHandler writes all updates obtained from planeState to the socket.
 // All communication is unidirectional from server to client.
 type websocketHandler struct {
+	// planeState points to the current plane state, which keeps being
+	// updated using UDP packets received from the flight simulator.
 	planeState *planestate.PlaneState
+	// sequenceNumber is the sequence number of the last update that
+	// has been processed.
+	sequenceNumber planestate.SequenceNumber
 }
 
-// bufferSize specifies the read and write buffer sizes in Bytes.
-const bufferSize = 32
+var upgrader = websocket.Upgrader{}
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:    bufferSize,
-	WriteBufferSize:   bufferSize,
-	EnableCompression: false,
-}
-
+// jsonResponse represents a single JSON response, which can hold an arbitrary
+// number of updates to the plane state. We always transmit all relevant
+// updates (updates that have not been superseded by new data) since the last
+// update, which we identify by sequence number.
 type jsonResponse struct {
-	Message string
+	// Updates contains all the updates since the last message.
+	updates []planestate.DataSet
 }
 
-func (*websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("upgrade:", err)
@@ -41,8 +44,11 @@ func (*websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// A never ending stream of Hello world.
 	for {
+		s, updates := h.planeState.GetControlDataSince(h.sequenceNumber, true)
+		h.sequenceNumber = s
+
 		response := &jsonResponse{
-			Message: "Hello world!",
+			updates: updates,
 		}
 		if ws.WriteJSON(&response); err != nil {
 			log.Println("ws.WriteMessage: ", err)
@@ -66,7 +72,8 @@ func (*websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // for client server communication.
 func createWebsocketHandler(planeState *planestate.PlaneState) *websocketHandler {
 	return &websocketHandler{
-		planeState: planeState,
+		planeState:     planeState,
+		sequenceNumber: 0,
 	}
 }
 
