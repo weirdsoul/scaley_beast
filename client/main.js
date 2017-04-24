@@ -11,7 +11,7 @@ goog.require('goog.net.WebSocket.MessageEvent');
  */
 function main() {
     var log = goog.log.getLogger("main");
-    
+
     var ws = new goog.net.WebSocket(true);
     goog.events.listen(ws, goog.net.WebSocket.EventType.MESSAGE,
 		       /** @param {!goog.net.WebSocket.MessageEvent} e **/
