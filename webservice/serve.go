@@ -19,6 +19,9 @@ type websocketHandler struct {
 	planeState *planestate.PlaneState
 	// sequenceNumber is the sequence number of the last update that
 	// has been processed.
+	// TODO(aeckleder): This is a bug, the sequenceNumber should be
+	// per connection and not per handler. Write a test that verifies
+	// the correct behavior!
 	sequenceNumber planestate.SequenceNumber
 }
 
@@ -30,7 +33,7 @@ var upgrader = websocket.Upgrader{}
 // update, which we identify by sequence number.
 type jsonResponse struct {
 	// Updates contains all the updates since the last message.
-	updates []planestate.DataSet
+	Updates []planestate.DataSet
 }
 
 func (h *websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +51,7 @@ func (h *websocketHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.sequenceNumber = s
 
 		response := &jsonResponse{
-			updates: updates,
+			Updates: updates,
 		}
 		if ws.WriteJSON(&response); err != nil {
 			log.Println("ws.WriteMessage: ", err)
