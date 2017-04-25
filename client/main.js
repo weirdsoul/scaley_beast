@@ -1,7 +1,6 @@
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.json');
-goog.require('goog.log');
 goog.require('goog.net.WebSocket');
 goog.require('goog.net.WebSocket.MessageEvent');
 
@@ -10,19 +9,17 @@ goog.require('goog.net.WebSocket.MessageEvent');
  * @export
  */
 function main() {
-    var log = goog.log.getLogger("main");
-
+    console.debug("Connecting to websocket.");
     var ws = new goog.net.WebSocket(true);
     goog.events.listen(ws, goog.net.WebSocket.EventType.MESSAGE,
 		       /** @param {!goog.net.WebSocket.MessageEvent} e **/
 		       function(e) {
-			   var console = goog.dom.getElement("console");
-			   if (console != null) {
+			   var con = goog.dom.getElement("console");
+			   if (con != null) {
 			       var msg = goog.json.parse(e.message);
-			       goog.dom.append(console, e.message);
-			       goog.log.info(log, "Received message " + msg);
+			       goog.dom.append(con, goog.json.serialize(msg));
 			   } else {
-			       goog.log.error(log, "Couldn't find console.");
+			       console.error("Couldn't find console.");
 			   }
 			   ws.send("ACK");
 		       });
