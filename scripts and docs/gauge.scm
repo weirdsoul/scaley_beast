@@ -21,11 +21,11 @@
 
 ; Draw a single scale marking at the position specified by a circle around
 ; the specified center at deg degrees with the specified length.
-(define (drawScale inLayer centerX centerY deg len)
+(define (drawScale inLayer centerX centerY deg len padding)
   (let* (
 	 (pencil_line (cons-array 4 'double))
-         (ci (circ centerX centerY (- centerX (+ 10 len)) deg))
-         (co (circ centerX centerY (- centerX 10) deg))
+         (ci (circ centerX centerY (- centerX (+ padding len)) deg))
+         (co (circ centerX centerY (- centerX padding) deg))
 	 )
     (aset pencil_line 0 (car ci))
     (aset pencil_line 1 (cadr ci))
@@ -35,18 +35,20 @@
   )
 )
 
-(define (script-fu-gauge inImage inLayer)
+(define (script-fu-gauge inImage inLayer step evenMarkerLen oddMarkerLen padding)
   (let*
       (
        (xRes (car(gimp-drawable-height inLayer)))
        (yRes (car(gimp-drawable-width inLayer)))
        (centerX (/ xRes 2))
        (centerY (/ yRes 2))
-       (r (range 0 359 10))
-       )    
+       (r (range 0 359 step))
+       )
     (gimp-undo-push-group-start inImage)
     (while (not (null? r))
-	   (drawScale inLayer centerX centerY (car r) 10)
+	   (drawScale inLayer centerX centerY (car r)
+		      (if (> (modulo (car r) (* step 2)) 0) oddMarkerLen evenMarkerLen)
+		      padding)
 	   (set! r (cdr r))
     )
     (gimp-undo-push-group-end inImage)
@@ -63,5 +65,9 @@
     "RGB"                                      ;image type
     SF-IMAGE       "Image"         0
     SF-DRAWABLE    "Drawable"      0
+    SF-VALUE       "Step size"           "15"
+    SF-VALUE       "Even marker length"  "15"
+    SF-VALUE       "Odd marker length"   "5"
+    SF-VALUE       "Padding"             "50"
 )
 (script-fu-menu-register "script-fu-gauge" "<Image>/Filters/Render")
