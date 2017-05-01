@@ -24,6 +24,6 @@ filegroup(
 	srcs = [
 	     "index.html",
 	     ":instruments_client",
-	],
+	] + glob(["assets/*"]),
 	visibility = ["//visibility:public"],
 )
