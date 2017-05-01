@@ -37,23 +37,25 @@
 
 ; Maps the specified input to a polynomial. In the typical case, this is a non-linear
 ; function to stretch part of the scale.
-(define (map-to-polynomial x)
-  (+ (* 1.194e-6 (expt x 4)) (* -0.00049614 (expt x 3))
-     (* 0.062352 (expt x 2)) (* -0.21389 x) -0.86754)
+(define (map-to-polynomial x)  
+  (+ (* -2.2126e-10 (expt x 6)) (*  1.1855e-7 (expt x 5))
+     (* -2.218e-5   (expt x 4)) (*  1.5692e-3 (expt x 3))
+     (* -1.6063e-2  (expt x 2)) (*  7.2573e-1 x) 5.9149e-1)
 )
 
-(define (script-fu-gauge inImage inLayer step evenMarkerLen oddMarkerLen padding)
+(define (script-fu-gauge inImage inLayer evenMarkerLen oddMarkerLen padding rangeStart
+			 rangeEnd step scalingFactor)
   (let*
       (
        (xRes (car(gimp-drawable-height inLayer)))
        (yRes (car(gimp-drawable-width inLayer)))
        (centerX (/ xRes 2))
        (centerY (/ yRes 2))
-       (r (range 0 190 step))
+       (r (range rangeStart rangeEnd step))
        )
     (gimp-undo-push-group-start inImage)
     (while (not (null? r))
-	   (drawScale inLayer centerX centerY (map-to-polynomial (car r))
+	   (drawScale inLayer centerX centerY (map-to-polynomial (* scalingFactor (car r)))
 		      (if (> (modulo (car r) (* step 2)) 0) oddMarkerLen evenMarkerLen)
 		      padding)
 	   (set! r (cdr r))
@@ -72,9 +74,12 @@
     "RGBA"                                      ;image type
     SF-IMAGE       "Image"         0
     SF-DRAWABLE    "Drawable"      0
-    SF-VALUE       "Step size"           "10"
     SF-VALUE       "Even marker length"  "10"
     SF-VALUE       "Odd marker length"   "5"
     SF-VALUE       "Padding"             "50"
+    SF-VALUE       "Range start"         "0"
+    SF-VALUE       "Range end"           "190"
+    SF-VALUE       "Step size"           "10"
+    SF-VALUE       "Scaling factor"      "1"
 )
 (script-fu-menu-register "script-fu-gauge" "<Image>/Filters/Render")
