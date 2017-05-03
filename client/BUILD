@@ -5,6 +5,7 @@ closure_js_library(
 	name = "instruments_client_main",
 	srcs = [
 	     "main.js",
+	     "analog_gauge.js",
 	],
 	deps = [
 	  "@io_bazel_rules_closure//closure/library",

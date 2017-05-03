@@ -5,12 +5,10 @@
   </head>
   <body onload="main()">
     <h1>Welcome to Browser Instruments</h1>
-    Please see this beautiful airspeed indicator!
-    <p/>
-    <svg width="480" height="480" version="1.1">
+    Please see this beautiful airspeed indicator!<br/>
+    <svg class="AnalogGauge" width="480" height="480" version="1.1" style="float:left;">
       <image xlink:href="assets/asi_background.png" x="0" y="0" height="480px" width="480px"/>
-      <image xlink:href="assets/asi_needle.png" x="0" y="0" height="480px" width="480px" transform="rotate(45 240 240)"/>
+      <image class="needle" xlink:href="assets/asi_needle.png" x="0" y="0" height="480px" width="480px"/>
     </svg>
-    <div id="console"></div>
   </body>
 </html>
