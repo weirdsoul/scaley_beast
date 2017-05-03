@@ -23,6 +23,6 @@ function main() {
 			   }
 			   ws.send("ACK");
 		       });
-    ws.open("ws://localhost:8080/ws");
+    ws.open("ws://" + location.host + "/ws");
 }
 
