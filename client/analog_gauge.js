@@ -2,7 +2,7 @@ goog.provide('browser_instruments.AnalogGauge');
 
 goog.require('goog.dom');
 
-/** 
+/**
  * Construct an AnalogGauge instance associated with the specified DOM element..
  * @constructor
  * @param {!Element} domElement The associated DOM element.
