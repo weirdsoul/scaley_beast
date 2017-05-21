@@ -1,6 +1,7 @@
 goog.provide('browser_instruments.AnalogGauge');
 
 goog.require('goog.dom');
+goog.require('goog.dom.dataset');
 
 /**
  * Construct an AnalogGauge instance associated with the specified DOM element..
@@ -9,19 +10,17 @@ goog.require('goog.dom');
  */
 browser_instruments.AnalogGauge = function(domElement) {
     this.domElement = domElement;
-};
-
-/**
- * Convert airspeed in knots to degrees of needle movement.
- * @param {number} x
- * @return {number}
- */
-browser_instruments.AnalogGauge.speedToDeg = function(x) {
-    return (
-	    -2.2126e-10 * Math.pow(x,6) + 1.1855e-7 * Math.pow(x,5) +
-	    -2.218e-5 * Math.pow(x,4) + 1.5602e-3 * Math.pow(x,3) +
-	    -1.6063e-2 * Math.pow(x,2) + 7.2573e-1 * x +
-	    5.9149e-1);
+    if (goog.dom.dataset.has(domElement, "transform")) {
+	// Data transform is used to convert the input signal x to degrees.
+	this.speedToDeg = new Function("x", goog.dom.dataset.get(domElement, "transform"));
+    } else {
+	console.log("Using fallback function for input signal conversion.");
+	/**Completely linear. Expects the input to be degrees.
+	 * @param {number} x Input to be converted.
+	 * @return {number} Resulting degrees for the gauge hand.
+	 */
+	this.speedToDeg = function(x) { return x; };
+    }
 };
 
 /**
@@ -39,7 +38,7 @@ browser_instruments.AnalogGauge.prototype.updateInstrument = function(msg) {
 	if (valueSet.length > 0) {
 	    var gaugeValue = parseFloat(valueSet[0]);
 	    if (gaugeValue != null) {
-		var degree = browser_instruments.AnalogGauge.speedToDeg(gaugeValue);
+		var degree = this.speedToDeg(gaugeValue);
 		// TODO(aeckleder): Do not hardcode center point here.
 		needleElement.setAttribute("transform",
 					   "rotate(" + degree + " 240 240)");
