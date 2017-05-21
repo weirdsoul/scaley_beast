@@ -34,8 +34,6 @@ browser_instruments.AnalogGauge = function(domElement) {
  * @param {!Object} msg A JSON object containing all the update information.
  */
 browser_instruments.AnalogGauge.prototype.updateInstrument = function(msg) {
-    // TODO(aeckleder): We only care about speed right now. But we want a generic gauge,
-    // so do not hardcode this here.
     if (msg["Index"] != this.inputSource) return;
     var needleElement = goog.dom.getElementByClass("needle", this.domElement);
     if (needleElement != null) {
