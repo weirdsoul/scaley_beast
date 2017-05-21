@@ -26,7 +26,7 @@ browser_instruments.AnalogGauge = function(domElement) {
 	? parseInt(goog.dom.dataset.get(domElement, "source"), 10): 3;
     /** @type {number} **/
     this.inputIndex =  goog.dom.dataset.has(domElement, "index")
-	? parseInt(goog.dom.dataset.get(domElement, "index"), 10): 0;    
+	? parseInt(goog.dom.dataset.get(domElement, "index"), 10): 0;
     if (goog.dom.dataset.has(domElement, "transform2")) {
 	// Data transform is used to convert the input signal x to degrees.
 	this.speedToDeg2 = new Function("x", goog.dom.dataset.get(domElement, "transform2"));
@@ -53,7 +53,7 @@ browser_instruments.AnalogGauge = function(domElement) {
 browser_instruments.AnalogGauge.prototype.updateInstrument = function(msg) {
     /** @type {?Array<?Object>} **/
     var valueSet = msg["Values"];
-    if (valueSet.length == 0) return;    
+    if (valueSet.length == 0) return;
     if (msg["Index"] == this.inputSource) {
 	var needleElement = goog.dom.getElementByClass("needle", this.domElement);
 	if (needleElement != null) {
