@@ -21,6 +21,12 @@ browser_instruments.AnalogGauge = function(domElement) {
 	 */
 	this.speedToDeg = function(x) { return x; };
     }
+    /** @type {number} **/
+    this.inputSource = goog.dom.dataset.has(domElement, "source")
+	? parseInt(goog.dom.dataset.get(domElement, "source"), 10): 3;
+    /** @type {number} **/
+    this.inputIndex =  goog.dom.dataset.has(domElement, "index")
+	? parseInt(goog.dom.dataset.get(domElement, "index"), 10): 0;
 };
 
 /**
@@ -30,13 +36,13 @@ browser_instruments.AnalogGauge = function(domElement) {
 browser_instruments.AnalogGauge.prototype.updateInstrument = function(msg) {
     // TODO(aeckleder): We only care about speed right now. But we want a generic gauge,
     // so do not hardcode this here.
-    if (msg["Index"] != "3") return;
+    if (msg["Index"] != this.inputSource) return;
     var needleElement = goog.dom.getElementByClass("needle", this.domElement);
     if (needleElement != null) {
 	/** @type {?Array<?Object>} **/
 	var valueSet = msg["Values"];
 	if (valueSet.length > 0) {
-	    var gaugeValue = parseFloat(valueSet[0]);
+	    var gaugeValue = parseFloat(valueSet[this.inputIndex]);
 	    if (gaugeValue != null) {
 		var degree = this.speedToDeg(gaugeValue);
 		// TODO(aeckleder): Do not hardcode center point here.
