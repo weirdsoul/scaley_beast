@@ -44,7 +44,7 @@
 )
 
 (define (script-fu-gauge inImage inLayer evenMarkerLen oddMarkerLen padding rangeStart
-			 rangeEnd step scalingFactor)
+			 rangeEnd step scalingFactor nonLinear)
   (let*
       (
        (xRes (car(gimp-drawable-height inLayer)))
@@ -55,7 +55,10 @@
        )
     (gimp-undo-push-group-start inImage)
     (while (not (null? r))
-	   (drawScale inLayer centerX centerY (map-to-polynomial (* scalingFactor (car r)))
+	   (drawScale inLayer centerX centerY
+		      (if (> nonLinear 0)
+			  (map-to-polynomial (* scalingFactor (car r)))
+			  (* scalingFactor (car r)))
 		      (if (> (modulo (car r) (* step 2)) 0) oddMarkerLen evenMarkerLen)
 		      padding)
 	   (set! r (cdr r))
@@ -81,5 +84,6 @@
     SF-VALUE       "Range end"           "190"
     SF-VALUE       "Step size"           "10"
     SF-VALUE       "Scaling factor"      "1"
+    SF-TOGGLE      "Non-linear scale"    FALSE
 )
 (script-fu-menu-register "script-fu-gauge" "<Image>/Filters/Render")
