@@ -17,21 +17,21 @@ browser_instruments.AnalogGauge = function(domElement) {
     this.inputIndex = [];
     /** @type {!Array<!function(number):number>} **/    
     this.speedToDeg = [];
-    
+
     for (var sig = 0; foundElement; ++sig) {
 	/** @type {string} **/
 	var indexSuffix = sig > 0 ? (sig + 1).toString() : "";
-	
+
 	var sourceAttr = "source" + indexSuffix;
-	
+
 	// If we don't have a source we are done.
 	if (!goog.dom.dataset.has(domElement, sourceAttr)) {
 	    console.log("Attribute " + sourceAttr + " not found, assuming that we are done.");
 	    break;
 	}
-	
+
 	this.inputSource.push(parseInt(goog.dom.dataset.get(domElement, sourceAttr), 10));
-	
+
 	var indexAttr = "index" + indexSuffix;
 	this.inputIndex.push(goog.dom.dataset.has(domElement, indexAttr)
 			     ? parseInt(goog.dom.dataset.get(domElement, indexAttr), 10): 0);
@@ -60,13 +60,13 @@ browser_instruments.AnalogGauge.prototype.updateInstrument = function(msg) {
     /** @type {?Array<?Object>} **/
     var valueSet = msg["Values"];
     if (valueSet.length == 0) return;
-    for (var sig = 0; sig < this.inputSource.length; ++sig) {	
+    for (var sig = 0; sig < this.inputSource.length; ++sig) {
 	if (msg["Index"] == this.inputSource[sig]) {
 	    /** @type {string} **/
 	    var indexSuffix = sig > 0 ? (sig + 1).toString() : "";
-	    
+
 	    var needleName = "needle" + indexSuffix;
-	    
+
 	    var needleElement = goog.dom.getElementByClass(needleName, this.domElement);
 	    if (needleElement != null) {
 		var gaugeValue = parseFloat(valueSet[this.inputIndex[sig]]);
