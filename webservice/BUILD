@@ -1,7 +1,4 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
-
-go_prefix("github.com/weirdsoul/browser_instruments/webservice")
 
 go_library(
 	name = "go_default_library",
@@ -10,7 +7,8 @@ go_library(
 	],
 	visibility = ["//visibility:public"],
 	deps = [
-	     "//planestate:go_default_library",
+	     "//scalestate:go_default_library",
 	     "@gorilla_websocket//:go_default_library",
 	],
+	importpath = "github.com/weirdsoul/scaley_beast/webservice"
 )

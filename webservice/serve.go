@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/weirdsoul/browser_instruments/planestate"
+	"github.com/weirdsoul/scaley_beast/scalestate"
 )
 
 // websocketHandler writes all updates obtained from planeState to the socket.

@@ -1,8 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
 load("@io_bazel_rules_go//go:def.bzl", "go_test")
-
-go_prefix("github.com/weirdsoul/scaley_beast/scalestate")
 
 go_library(
 	name = "go_default_library",
@@ -10,6 +7,7 @@ go_library(
 	     "scalestate.go",
 	],
 	visibility = ["//visibility:public"],
+	importpath = "github.com/weirdsoul/scaley_beast/scalestate",
 )
 
 go_test(
@@ -17,5 +15,6 @@ go_test(
 	srcs = [
 	     "scalestate_test.go",
 	],
-	library = ":go_default_library",
+	importpath = "github.com/weirdsoul/scaley_beast/scalestate",
+	embed = [":go_default_library"],
 )

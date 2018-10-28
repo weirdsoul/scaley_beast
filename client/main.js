@@ -2,7 +2,6 @@ goog.require('browser_instruments.AnalogGauge');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('goog.json');
 goog.require('goog.net.WebSocket');
 goog.require('goog.net.WebSocket.MessageEvent');
 
@@ -31,7 +30,7 @@ function main() {
     goog.events.listen(ws, goog.net.WebSocket.EventType.MESSAGE,
 		       /** @param {!goog.net.WebSocket.MessageEvent} e **/
 		       function(e) {
-			   var msg = goog.json.parse(e.message);
+			   var msg = JSON.parse(e.message);
 			   goog.array.forEach(analogGauges, function (gauge) {
 			       if (msg != null) {
 				   /** @type {?Array<?Object>} **/
