@@ -23,7 +23,11 @@ float calibration_factor = -23479; // Calibrated using a 1kg weight.
 void setup() {
   Serial.begin(115200);
   scale.set_scale();
-  scale.tare(); //Reset the scale to 0
+  // Artificial delay before determining the zero point.
+  // This seems to be necessary as the value fluctuates shortly
+  // after startup.
+  delay(1000);
+  scale.tare(10); //Reset the scale to 0
 
   // Configure LED
   pinMode(LED, OUTPUT);
@@ -42,11 +46,11 @@ void loop() {
   {
     char temp = Serial.read();
     if (temp == 't')
-      scale.tare();  //Reset the scale to zero
+      scale.tare(10);  //Reset the scale to zero
     else if (temp == 'r') {      
       // This is our value for 1 kg and therefore
       // our new scale.
-      calibration_factor = scale.get_value(5);
+      calibration_factor = scale.get_value(10);
     }
     else if(temp == ',')
         digitalWrite(LED, true);
