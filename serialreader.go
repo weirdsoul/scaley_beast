@@ -23,7 +23,6 @@ func ReadSerialLooping(reader io.Reader, planeState *planestate.PlaneState) {
 		if err != nil {
 		        log.Printf("strconv.ParseFloat: %v", err)
 		}
-		log.Printf("weight=%v", f)
 
 		var dataSet planestate.DataSet
 		dataSet.Index = planestate.Weight
