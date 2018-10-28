@@ -54,3 +54,28 @@ new_git_repository(
     build_file_content = BARE_BUILD,
     commit = "a91eba7",
 )
+
+SERIAL_BUILD = """
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    importpath = "github.com/tarm/serial",
+    cgo = True,
+    srcs = [
+         "serial.go",
+         "serial_linux.go",
+         "serial_posix.go",
+         "serial_windows.go",
+	 ],
+    visibility = ["//visibility:public"],
+)
+
+"""
+
+new_git_repository(
+    name = "tarm_serial",
+    remote = "https://github.com/tarm/serial.git",
+    build_file_content = SERIAL_BUILD,
+    commit = "98f6abe",
+)

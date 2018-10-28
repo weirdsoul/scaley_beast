@@ -9,8 +9,7 @@ import (
 type ControlDataType int32
 
 const (
-	Speed ControlDataType = 3
-	RPM   ControlDataType = 37
+        Weight ControlDataType = 0
 )
 
 // DataSet stores a single set of X-Plane control data.

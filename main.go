@@ -7,36 +7,35 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"net"
 
+	"github.com/tarm/serial"
 	"github.com/weirdsoul/scaley_beast/scalestate"
 	"github.com/weirdsoul/scaley_beast/webservice"
 )
 
-var udpPort = flag.Int("udp_port", 49042, "udp port to listen on")
+var serialInterface = flag.String("serial", "/dev/cu.wchusbserial620", "serial port to listen on")
 var httpPort = flag.Int("http_port", 8080, "port used for serving http")
 var staticDir = flag.String("static_dir", "./client", "directory containing static content")
 
 func main() {
-	fmt.Println("Instruments server - Version 0.1")
-	fmt.Println("Copyright 2017 Andreas Eckleder\n")
+	fmt.Println("Scaley beast - Version 0.1")
+	fmt.Println("Copyright 2018 Andreas Eckleder\n")
 
 	flag.Parse()
 
-	log.Printf("Listening on port %v.\n", *udpPort)
+	log.Printf("Listening on serial port %v.\n", *serialInterface)
 
-	addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf(":%v", *udpPort))
-	if err != nil {
-		log.Fatalf("net.ResolveUDPAddr: %v", err)
-	}
-	sock, err := net.ListenUDP("udp", addr)
-	if err != nil {
-		log.Fatalf("net.ListenUDP: %v", err)
-	}
 	planeState := planestate.NewPlaneState()
 
+	c := &serial.Config{Name: *serialInterface, 
+	     	            Baud: 115200}
+        serial, err := serial.OpenPort(c)
+	if err != nil {
+	   log.Printf("serial.OpenPort: %v", err)
+	}
+
 	// Start receiver loop in the background. It never stops.
-	go ReadUDPLooping(sock, planeState)
+	go ReadSerialLooping(serial, planeState)
 
 	log.Printf("Serving http on port %v.\n", *httpPort)
 

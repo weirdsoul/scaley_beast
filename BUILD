@@ -13,6 +13,7 @@ go_binary(
 	deps = [
 	     "//scalestate:go_default_library",
 	     "//webservice:go_default_library",
+             "@tarm_serial//:go_default_library",
 	],
 	importpath = "github.com/weirdsoul/scaley_beast",
 )

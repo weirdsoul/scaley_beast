@@ -1,33 +1,13 @@
 <html>
   <head>
-    <title>Browser Instruments</title>
-    <script src="instruments_client.js"></script>
+    <title>The Incredible Eddie Revival Machine</title>
+    <script src="scaley_beast_client.js"></script>
   </head>
   <body onload="main()">
-    <svg class="AnalogGauge" data-transform="return (
-					     -2.2126e-10 * Math.pow(x,6) + 1.1855e-7 * Math.pow(x,5) +
-					     -2.218e-5 * Math.pow(x,4) + 1.5602e-3 * Math.pow(x,3) +
-					     -1.6063e-2 * Math.pow(x,2) + 7.2573e-1 * x +
-					     5.9149e-1);"
-	 data-source="3" data-index="0" width="480" height="480" version="1.1" style="float:left;">
+    <svg class="AnalogGauge" data-transform="return x * (360-45);"
+	 data-source="0" data-index="0" width="480" height="480" version="1.1" style="float:left;">
       <image xlink:href="assets/asi_background.png" x="0" y="0" height="480px" width="480px"/>
       <image class="needle" xlink:href="assets/asi_needle.png" x="0" y="0" height="480px" width="480px"/>
-    </svg>
-    <svg class="AnalogGauge"
-	 data-transform="return (x / 1000) * 360;"
-	 data-source="20"
-	 data-index="5"
-	 data-transform2="return (x / 10000) * 360;"
-	 data-source2="20"
-	 data-index2="5"
-	 data-transform3="return (x / 100000) * 360;"
-	 data-source3="20"
-	 data-index3="5"
-	 width="480" height="480" version="1.1" style="float:left;">
-      <image xlink:href="assets/altimeter_background.png" x="0" y="0" height="480px" width="480px"/>
-      <image class="needle3" xlink:href="assets/altimeter_needle3.png" x="0" y="0" height="480px" width="480px"/>
-      <image class="needle2" xlink:href="assets/altimeter_needle2.png" x="0" y="0" height="480px" width="480px"/>
-      <image class="needle" xlink:href="assets/altimeter_needle1.png" x="0" y="0" height="480px" width="480px"/>
     </svg>
   </body>
 </html>
