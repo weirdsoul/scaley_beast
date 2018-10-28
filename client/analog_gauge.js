@@ -79,6 +79,15 @@ browser_instruments.AnalogGauge.prototype.updateInstrument = function(msg) {
 	    } else {
 		console.error("Couldn't find needle element.");
 	    }
+
+	    var textName = "weight_string";
+	    var textElement = goog.dom.getElementByClass(textName, this.domElement);
+	    if (textElement != null) {
+		var gaugeValue = parseFloat(valueSet[this.inputIndex[sig]]);
+		if (gaugeValue != null) {
+		    textElement.textContent = "" + gaugeValue * 1000 + " g";
+		}
+	    }
 	}
     }
 };
