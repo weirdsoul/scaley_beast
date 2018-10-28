@@ -9,8 +9,8 @@ import (
 	"log"
 	"net"
 
-	"github.com/weirdsoul/browser_instruments/planestate"
-	"github.com/weirdsoul/browser_instruments/webservice"
+	"github.com/weirdsoul/scaley_beast/scalestate"
+	"github.com/weirdsoul/scaley_beast/webservice"
 )
 
 var udpPort = flag.Int("udp_port", 49042, "udp port to listen on")

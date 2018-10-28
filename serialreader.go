@@ -7,7 +7,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/weirdsoul/browser_instruments/planestate"
+	"github.com/weirdsoul/scaley_beast/scalestate"
 )
 
 const receiverBufferSize = 2048
