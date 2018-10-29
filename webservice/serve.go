@@ -80,6 +80,28 @@ func createWebsocketHandler(planeState *planestate.PlaneState) *websocketHandler
 	}
 }
 
+func reanimateHandler(w http.ResponseWriter, r *http.Request) {
+  switch r.Method {
+    case "POST":
+        if err := r.ParseForm(); err != nil {
+          fmt.Fprintf(w, "ParseForm() err: %v", err)
+          return
+        }
+        fmt.Fprintf(w, "Post from website! r.PostFrom = %v\n", r.PostForm)
+        phase_1 := r.FormValue("phase_1")
+        phase_2 := r.FormValue("phase_2")
+        phase_3 := r.FormValue("phase_3")
+        access_code := r.FormValue("access_code")
+        fmt.Fprintf(w, "Phase_1 = %s\n", phase_1)
+        fmt.Fprintf(w, "Phase_2 = %s\n", phase_2)
+        fmt.Fprintf(w, "Phase_3 = %s\n", phase_3)
+        fmt.Fprintf(w, "Access_code = %s\n", access_code)
+    default:
+    	 http.Error(w, "405 method not allowed.", http.StatusMethodNotAllowed)
+	 return
+    }
+}
+
 // ServeHTTP serves http on the specified port using the specified plane data.
 // It offers a simple JSON service to retrieve plane state and serves static
 // http content from the specified directory. This function never returns.
@@ -87,6 +109,7 @@ func ServeHTTP(port int, staticDir string, planeState *planestate.PlaneState) {
 	// Serve the static directory as the root.
 	http.Handle("/", http.FileServer(http.Dir(staticDir)))
 	http.Handle("/ws", createWebsocketHandler(planeState))
+	http.HandleFunc("/reanimate", reanimateHandler)
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }
