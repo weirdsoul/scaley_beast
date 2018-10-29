@@ -27,11 +27,12 @@ func main() {
 
 	planeState := planestate.NewPlaneState()
 
-	c := &serial.Config{Name: *serialInterface, 
-	     	            Baud: 115200}
-        serial, err := serial.OpenPort(c)
+	c := &serial.Config{Name: *serialInterface,
+		Baud: 115200}
+	serial, err := serial.OpenPort(c)
 	if err != nil {
-	   log.Printf("serial.OpenPort: %v", err)
+		log.Printf("serial.OpenPort: %v", err)
+		return
 	}
 
 	// Start receiver loop in the background. It never stops.

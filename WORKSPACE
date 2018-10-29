@@ -69,6 +69,11 @@ go_library(
          "serial_windows.go",
 	 ],
     visibility = ["//visibility:public"],
+    deps = select({
+        "@io_bazel_rules_go//go/platform:linux": [
+            "@org_golang_x_sys//unix:go_default_library",
+        ],
+        "//conditions:default": [],}),
 )
 
 """
