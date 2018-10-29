@@ -1,4 +1,5 @@
 goog.require('browser_instruments.AnalogGauge');
+goog.require('browser_instruments.AssignFromScale');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -25,6 +26,24 @@ function main() {
 			   console.log("Created analog gauge.");
 		       });
 
+    var domElement = goog.dom.getElement("phase_1_button");
+    if (domElement != null) {
+	domElement.onclick = function() {			       
+	    browser_instruments.AssignFromScale("phase_1");
+	};
+    }
+    domElement = goog.dom.getElement("phase_2_button");
+    if (domElement != null) {
+	domElement.onclick = function() {			       
+	    browser_instruments.AssignFromScale("phase_2");
+	};
+    }
+    domElement = goog.dom.getElement("phase_3_button");
+    if (domElement != null) {
+	domElement.onclick = function() {			       
+	    browser_instruments.AssignFromScale("phase_3");
+	};
+    }
 
     var ws = new goog.net.WebSocket(true);
     goog.events.listen(ws, goog.net.WebSocket.EventType.MESSAGE,

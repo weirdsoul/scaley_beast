@@ -2,13 +2,57 @@
   <head>
     <title>The Incredible Eddie Revival Machine</title>
     <script src="scaley_beast_client.js"></script>
+    <style>
+      body {
+        background: #101010;
+      }
+      #scale {
+        width: 480px;
+        height: 480px;
+      }
+      h1 {
+        color: gray;
+      }
+      #form {
+        color: red;
+        width: 640px;
+        height: 480px;
+        display: inline-block;
+        vertical-align: top;
+      }
+    </style>
   </head>
   <body onload="main()">
-    <svg class="AnalogGauge" data-transform="return x*(360-45);"
-	 data-source="0" data-index="0" width="480" height="480" version="1.1" style="float:left;">
+    <svg id="scale" class="AnalogGauge" data-transform="return x*(360-45);"
+	 data-source="0" data-index="0" width="480" height="480" version="1.1">
       <image xlink:href="assets/asi_background.png" x="0" y="0" height="480px" width="480px"/>
       <image class="needle" xlink:href="assets/asi_needle.png" x="0" y="0" height="480px" width="480px"/>
       <text class="weight_string" x="10" y="20" fill="red"/>
     </svg>
+    <div id="form">
+      <h1>Enter measurements and access code:</h1>
+      <p>
+	Order matters. Take your time for the measurements and enter the access code. 
+	Be diligent! We don't want any accidents, do we?
+      </p>
+      <form>
+	Phase #1 blood supply:
+	<input id="phase_1" type="text" name="phase_1" readonly="true">
+	<button type="button" class="assign" id="phase_1_button">Assign</button>
+	<br>
+	Phase #2 blood supply:
+	<input id="phase_2" type="text" name="phase_2" readonly="true">
+	<button type="button" class="assign" id="phase_2_button">Assign</button>
+	<br>
+	Phase #3 blood supply:
+	<input id="phase_3" type="text" name="phase_3" readonly="true">
+	<button type="button" class="assign" id="phase_3_button">Assign</button>
+	<br><br>
+	Access code:
+	<input type="text" name="access_code">
+	<input type="submit" value="Reanimate!">
+      </form>	
+    </div>
+
   </body>
 </html>

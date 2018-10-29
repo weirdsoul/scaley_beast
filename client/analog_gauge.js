@@ -1,7 +1,23 @@
 goog.provide('browser_instruments.AnalogGauge');
+goog.provide('browser_instruments.AssignFromScale');
 
 goog.require('goog.dom');
 goog.require('goog.dom.dataset');
+
+var currentGaugeValue = 0;
+
+/**
+ * Get a value from the scale.
+ * @param {string} textId The id of the form field to update.
+ * @export
+ */
+browser_instruments.AssignFromScale = function(textId) {
+    /** @type {?Object} **/
+    var element = document.getElementById(textId);
+    if (element != null) {
+	element["value"] = currentGaugeValue * 1000;
+    }
+};
 
 /**
  * Construct an AnalogGauge instance associated with the specified DOM element..
@@ -86,6 +102,7 @@ browser_instruments.AnalogGauge.prototype.updateInstrument = function(msg) {
 		var gaugeValue = parseFloat(valueSet[this.inputIndex[sig]]);
 		if (gaugeValue != null) {
 		    textElement.textContent = "" + gaugeValue * 1000 + " g";
+		    currentGaugeValue = gaugeValue;
 		}
 	    }
 	}

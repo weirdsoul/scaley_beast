@@ -17,6 +17,7 @@ closure_js_binary(
 	deps = [
 	     ":scaley_beast_client_main",
 	],
+        entry_points = ["goog:browser_instruments.AssignFromScale"],
 	visibility = ["//visibility:public"],
 )
 
