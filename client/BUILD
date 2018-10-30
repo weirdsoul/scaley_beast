@@ -25,6 +25,8 @@ filegroup(
 	name = "data",
 	srcs = [
 	     "index.html",
+	     "success.html",
+	     "failure.html",
 	     ":scaley_beast_client",
 	] + glob(["assets/*"]),
 	visibility = ["//visibility:public"],
