@@ -97,21 +97,9 @@ func reanimateHandler(staticDir string, serialWriter io.Writer,
 
         access_code := r.FormValue("access_code")
 
-        p1, err := strconv.ParseFloat(phase_1, 64)
-        if err != nil {
-		fmt.Fprintf(w, "strconv.ParseFloat: %v", err)
-                return
-        }
-        p2, err := strconv.ParseFloat(phase_2, 64)
-        if err != nil {
-		fmt.Fprintf(w, "strconv.ParseFloat: %v", err)
-                return
-        }
-        p3, err := strconv.ParseFloat(phase_3, 64)
-        if err != nil {
-		fmt.Fprintf(w, "strconv.ParseFloat: %v", err)
-                return
-        }
+        p1, _ := strconv.ParseFloat(phase_1, 64)
+        p2, _ := strconv.ParseFloat(phase_2, 64)
+        p3, _ := strconv.ParseFloat(phase_3, 64)
 
         var p1_golden float64 = 110.00
         var p2_golden float64 = 330.00
