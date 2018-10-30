@@ -41,5 +41,5 @@ func main() {
 	log.Printf("Serving http on port %v.\n", *httpPort)
 
 	// Start serving http.
-	webservice.ServeHTTP(*httpPort, *staticDir, planeState)
+	webservice.ServeHTTP(*httpPort, *staticDir, planeState, serial)
 }
