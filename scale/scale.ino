@@ -17,6 +17,9 @@ HX711 scale(DOUT, CLK);
  
 float calibration_factor = -23479; // Calibrated using a 1kg weight.
 
+float previous_weights[5]; // The last weight values.
+float rolling_weight = 0; // Rolling average of the weight.
+
 //=============================================================================================
 //                         SETUP
 //=============================================================================================
@@ -29,6 +32,12 @@ void setup() {
   delay(1000);
   scale.tare(10); //Reset the scale to 0
 
+  for (int i = 0; i < 5; ++i) {
+    float c = scale.get_units(1);
+    previous_weights[i] = c;
+    rolling_weight += c;
+  }
+  
   // Configure LED
   pinMode(LED, OUTPUT);
 }
@@ -39,9 +48,18 @@ void setup() {
 void loop() {
  
   scale.set_scale(calibration_factor);
-  Serial.print(scale.get_units(5), 3);
+  Serial.print(rolling_weight / 5, 3);
   Serial.print("\n");
- 
+
+  // Update rolling weight.
+  rolling_weight -= previous_weights[0];
+  for (int i = 1; i < 5; ++i) {
+    previous_weights[i - 1] = previous_weights[i];
+  }
+  
+  previous_weights[4] = scale.get_units(1);
+  rolling_weight += previous_weights[4];
+  
   if(Serial.available())
   {
     char temp = Serial.read();
