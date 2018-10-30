@@ -32,10 +32,9 @@ void setup() {
   delay(1000);
   scale.tare(10); //Reset the scale to 0
 
+  rolling_weight = 0;
   for (int i = 0; i < 5; ++i) {
-    float c = scale.get_units(1);
-    previous_weights[i] = c;
-    rolling_weight += c;
+    previous_weights[i] = 0;
   }
   
   // Configure LED
