@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+        "math"
 	"net/http"
+        "strconv"
 
 	"github.com/gorilla/websocket"
 	"github.com/weirdsoul/scaley_beast/scalestate"
@@ -89,13 +91,34 @@ func reanimateHandler(staticDir string, serialWriter io.Writer,
           fmt.Fprintf(w, "ParseForm() err: %v", err)
           return
         }
-/*
         phase_1 := r.FormValue("phase_1")
         phase_2 := r.FormValue("phase_2")
         phase_3 := r.FormValue("phase_3")
-*/
+
         access_code := r.FormValue("access_code")
-	if access_code == "afterlife" {
+
+        p1, err := strconv.ParseFloat(phase_1, 64)
+        if err != nil {
+		fmt.Fprintf(w, "strconv.ParseFloat: %v", err)
+                return
+        }
+        p2, err := strconv.ParseFloat(phase_2, 64)
+        if err != nil {
+		fmt.Fprintf(w, "strconv.ParseFloat: %v", err)
+                return
+        }
+        p3, err := strconv.ParseFloat(phase_3, 64)
+        if err != nil {
+		fmt.Fprintf(w, "strconv.ParseFloat: %v", err)
+                return
+        }
+
+        var p1_golden float64 = 110.00
+        var p2_golden float64 = 330.00
+        var p3_golden float64 = 770.00
+
+	if access_code == "afterlife" && math.Abs(p1 - p1_golden) < 50 &&
+           math.Abs(p2 - p2_golden) < 50 && math.Abs(p3 - p3_golden) < 50 {
 		if _, err := serialWriter.Write([]byte(",")); err != nil {
 		   fmt.Fprintf(w, "Error contacting Eddie: %v", err)
                    return
